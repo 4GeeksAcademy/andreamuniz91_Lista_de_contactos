@@ -2,37 +2,64 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			contactListUrl: "https://playground.4geeks.com/contact/agendas",
+			swUrl: "",
+			slug: "Andrea",
+			contactos: [{name: "patata"}],
+
 		},
 		actions: {
+			getContacts: async () => {
+                const url = getStore().contactListUrl + "/" + getStore().slug
+				const options = {
+					method: "GET",
+					"Content-Type": "application/json" 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+
+				}
+				const data = await response.json()
+				setStore({contactos: data.contacts})
+				
+			},
+			deleteContact: async (id) => {
+                const url = getStore().contactListUrl + "/" + getStore().slug + "/contacts/" + id
+				const options = {
+					method: "DELETE",
+					"Content-Type": "application/json" 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+
+				}
+				
+				
+			},
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
 
 			getMessage: async () => {
-				try{
+				try {
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
 					return data;
-				}catch(error){
+				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},
+			
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
