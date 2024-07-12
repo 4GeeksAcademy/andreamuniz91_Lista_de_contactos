@@ -1,35 +1,23 @@
-import React, { useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext.js";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
-
-export const ContactListHome = () => {
+export const People = () => {
 const {store, actions} = useContext(Context)
-const navigate = useNavigate()
 const fetchData = async () => {
-   await actions.getContacts()
+   await actions.getPersonajes()
 }
 
-const handleDelete = async (id) => {
-    await actions.deleteContact(id)
-    fetchData()
-
-}
-const handleEdit = (personas) => {
-       actions.setCurrentContact(personas);
-        navigate("/edit");
-      }
 useEffect(() => {
     fetchData()
 }, []);
 
     return (
         <div className="container">
-            <Link to="/new-contact">
-            <button className="btn btn-primary mt-4">Añadir contacto</button>
+            <Link to="/people">
+            <button className="btn btn-primary mt-4"></button>
             </Link>
-            {store.contactos && store.contactos.map((item) =>(
+            {store.characters && store.characters.map((item) =>(
             <div className="card col-3" key={item.id}>           
                     <div className="card-body">
                         <h5 className="card-title">{item.name}</h5>
@@ -40,8 +28,8 @@ useEffect(() => {
                     <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>
                         <i className="fa-solid fa-trash"></i>
                     </button>
-                    <button className="btn btn-primary" type="submit" onClick={() => handleEdit(item)} >
-                    <i className="fa-solid fa-pen-to-square"></i>
+                    <button className="btn btn-primary" onClick={() => handleEdit(item)} >
+                        <i className="text-primary fas fa-pencil-alt"></i>
                     </button>
             </div>
             ))}
