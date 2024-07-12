@@ -1,10 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext.js";
+import { Link } from "react-router-dom";
 
 export const ContactListHome = () => {
 const {store, actions} = useContext(Context)
 const fetchData = async () => {
    await actions.getContacts()
+}
+
+const handleDelete = async (id) => {
+    await actions.deleteContact(id)
+    fetchData()
 }
 useEffect(() => {
     fetchData()
@@ -12,6 +18,9 @@ useEffect(() => {
 
     return (
         <div className="container">
+            <Link to="/contact-list/new">
+            <button>Añadir contacto</button>
+            </Link>
             {store.contactos && store.contactos.map((item) =>(
             <div className="card col-3" key={item.id}>           
                     <div className="card-body">
@@ -20,7 +29,9 @@ useEffect(() => {
                         <p>{item.phone}</p>
                         <p>{item.address}</p>
                     </div>
-                    <button className="btn btn-danger" onClick={() => actions.deleteContact(item.id)}>🗑</button>
+                    <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>
+                        <i className="fa-solid fa-trash"></i>
+                    </button>
             </div>
             ))}
         </div>

@@ -5,8 +5,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			contactListUrl: "https://playground.4geeks.com/contact/agendas",
 			swUrl: "",
 			slug: "Andrea",
-			contactos: [{name: "patata"}],
-
+			contactos: [],
+			currentContact: null,
 		},
 		actions: {
 			getContacts: async () => {
@@ -38,9 +38,52 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Hay un error", response.status, response.statusText)
 					console.error(url, options)
 
+				}			
+			},
+
+			editarContacto: async (id, name, email, phone, address) => {
+				const uri = getStore().contactListUrl + "/" + getStore().slug + "/contacts/" + id
+				const dataToSend = { 
+					"name": name,
+					"email": email,
+					"phone": phone,
+					"adress": address,
+
+				};
+				const options = {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					  },
+					body: JSON.stringify(dataToSend)
+
 				}
-				
-				
+				const response = await fetch(uri, options)
+				console.log(response);
+				if (!response.ok) {
+					console.log('Error: ', response.status, response.statusText);
+					return
+				}
+				console.log(dataToSend)
+				console.log(response)
+			},
+			crearContacto: async (contactos) => {
+				const uri = getStore().contactListUrl + "/" + getStore().slug + "/contacts/"
+				const dataToSend = contactos;
+				const options = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					  },
+					body: JSON.stringify(dataToSend)
+
+				}
+				const response = await fetch(uri, options)
+				console.log(response);
+				if (!response.ok) {
+					console.log('Error', response.status, response.statusText);
+					return
+				}				
 			},
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
@@ -73,7 +116,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			setCurretContact: (contact) => {
+				setStore({currentContact: contact})
+
 			}
+
 		}
 	};
 };
