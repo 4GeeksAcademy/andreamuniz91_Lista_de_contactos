@@ -7,10 +7,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			slug: "Andrea",
 			contactos: [],
 			currentContact: null,
-			characters: [],
+			personajes: [],
+			vehiculos: [],
+			planets: [],
+			species: [],
+			currentPersonaje: {},
 		},
 		actions: {
-			/* getPersonajes: async () => {
+			getPersonajes: async () => {
                 const url = getStore().swUrl + "/people"
 				const options = {
 					method: "GET",
@@ -21,8 +25,74 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (!response.ok) {
 					console.error("Hay un error", response.status, response.statusText)
 					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.results)
+				setStore({personajes: data.results})
+			},
+			getVehiculos: async () => {
+                const url = getStore().swUrl + "/vehicles"
+				const options = {
+					method: "GET",
+					"Content-Type": "application/json" 
+				}
 
-				}, */
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.results)
+				setStore({vehiculos: data.results})
+			},
+			getSpecies: async () => {
+                const url = getStore().swUrl + "/species"
+				const options = {
+					method: "GET",
+					"Content-Type": "application/json" 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.results)
+				setStore({species: data.results})
+			},
+			getPlanets: async () => {
+                const url = getStore().swUrl + "/planets"
+				const options = {
+					method: "GET",
+					"Content-Type": "application/json" 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.results)
+				setStore({planets: data.results})
+			},
+			getDetailPeople: async (characterid) => {
+                const url = `${process.env.URISTART}/api/people/${characterid}`
+				const options = {
+					method: "GET", 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.results)
+				setStore({currentPersonaje: data.results})
+			},
 			getContacts: async () => {
                 const url = getStore().contactListUrl + "/" + getStore().slug
 				const options = {
