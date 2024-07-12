@@ -13,7 +13,22 @@ export const Navbar = () => {
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
 							<Link to="/people">
-							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">StarWars</a>
+							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">Personajes</a>
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link to="/species">
+							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">Especies</a>
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link to="/vehiculos" className="nav-link fs-4 d-flex justify-content-end" aria-current="page">
+							 Vehículos
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link to="/planets">
+							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">Planetas</a>
 							</Link>
 						</li>
 						<li className="nav-item">

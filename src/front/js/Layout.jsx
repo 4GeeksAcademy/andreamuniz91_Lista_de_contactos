@@ -13,6 +13,10 @@ import { NewContact } from "./pages/NewContact.jsx";
 import { Edit } from "./pages/Edit.jsx"
 import { Error404 } from "./pages/Error404.jsx";
 import { People } from "./pages/People.jsx";
+import { Vehiculos } from "./pages/Vehiculos.jsx";
+import { Planets } from "./pages/Planets.jsx";
+import { DetailPeople } from "./pages/DetailPeople.jsx";
+import { Species } from "./pages/Species.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -33,6 +37,10 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Error404 />} path="*" />
                         <Route element={<People />} path="/people" />
+                        <Route element={<Vehiculos />} path="/vehiculos" />
+                        <Route element={<Planets />} path="/planets" />
+                        <Route element={<DetailPeople />} path="/detail-people" />
+                        <Route element={<Species />} path="/species" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
