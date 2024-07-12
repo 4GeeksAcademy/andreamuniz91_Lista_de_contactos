@@ -3,12 +3,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			contactListUrl: "https://playground.4geeks.com/contact/agendas",
-			swUrl: "",
+			swUrl: "https://swapi.tech/api/",
 			slug: "Andrea",
 			contactos: [],
 			currentContact: null,
+			characters: [],
 		},
 		actions: {
+			/* getPersonajes: async () => {
+                const url = getStore().swUrl + "/people"
+				const options = {
+					method: "GET",
+					"Content-Type": "application/json" 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+
+				}, */
 			getContacts: async () => {
                 const url = getStore().contactListUrl + "/" + getStore().slug
 				const options = {
@@ -85,6 +99,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return
 				}				
 			},
+			
+			
+			
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
@@ -117,11 +134,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//reset the global store
 				setStore({ demo: demo });
 			},
-			setCurretContact: (contact) => {
-				setStore({currentContact: contact})
-
-			}
-
+			
+			setCurrentContact: (contact) => { setStore({ currentContact: contact }) },
+			
 		}
 	};
 };

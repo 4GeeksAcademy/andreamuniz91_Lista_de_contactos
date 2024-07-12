@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 
 export const Edit = () => {
@@ -10,10 +10,10 @@ export const Edit = () => {
     const [address, setAddress] = useState(store.currentContact.address);
     const navigate = useNavigate()
 
-    const editContact = async (event) => {
+    const editContact = (event) => {
         event.preventDefault()
-        await actions.editarContacto(store.currentContact.id, name, email, phone, address)
-        navigate("/new-contact")
+        actions.editarContacto(store.currentContact.id, name, email, phone, address)
+        navigate("/contact-list")
     };
 
     return (
@@ -35,14 +35,13 @@ export const Edit = () => {
                     <label htmlFor="exampleInputEmail1">Dirección</label>
                     <input type="text" className="form-control" value={address} onChange={(event) => setAddress(event.target.value)} id="inputPhone" />
                 </div>
-                <div className="mt-3">
-                    <Link to={"/contact-list"}>
+                <div className="mt-3">   
                         <button type="submit" className="btn btn-primary me-2">Guardar</button>
-                    </Link>
+                 
                 </div>
             </form>
         </div>
     )
-} 
+}
 
 
