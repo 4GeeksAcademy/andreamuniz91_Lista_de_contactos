@@ -17,6 +17,9 @@ import { Vehiculos } from "./pages/Vehiculos.jsx";
 import { Planets } from "./pages/Planets.jsx";
 import { DetailPeople } from "./pages/DetailPeople.jsx";
 import { Species } from "./pages/Species.jsx";
+import { DetailPlanets } from "./pages/DetailPlanets.jsx";
+import { DetailVehiculos } from "./pages/DetailVehiculos.jsx";
+import { DetailSpecies } from "./pages/DetailSpecies.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -41,6 +44,9 @@ const Layout = () => {
                         <Route element={<Planets />} path="/planets" />
                         <Route element={<DetailPeople />} path="/detail-people" />
                         <Route element={<Species />} path="/species" />
+                        <Route element={<DetailPlanets />} path="/detail-planets" />
+                        <Route element={<DetailVehiculos />} path="/detail-vehiculos" />
+                        <Route element={<DetailSpecies />} path="/detail-species" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

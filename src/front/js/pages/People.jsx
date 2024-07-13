@@ -9,10 +9,9 @@ export const People = () => {
         await actions.getPersonajes()
     }
     const handleDetail = async (uid) => {
-        await actions.currentPersonaje(uid)
+        await actions.getDetailPeople(uid)
         navigate("/detail-people")
     }
-
     useEffect(() => {
         fetchData()
     }, []);
@@ -28,7 +27,10 @@ export const People = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">{item.name}</h5>
                                 </div>
-                                <a onClick={() => handleDetail(item.uid)} className="btn btn-warning">+Info</a>
+                                <button onClick={() => handleDetail(item.uid)} className="btn btn-warning">+Info</button>
+                                <button onClick={() => actions.addFavorite(item.name)} type="button" className="btn">
+                                <i className="fa fa-heart"></i>
+                            </button>  
                             </div>
                         </div>
                     </div>

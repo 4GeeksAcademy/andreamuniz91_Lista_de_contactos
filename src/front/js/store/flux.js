@@ -12,8 +12,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			planets: [],
 			species: [],
 			currentPersonaje: {},
+			currentPlanets: {},
+			currentVehiculo: {},
+            currentSpecies: {},
+			favorite: [],
 		},
 		actions: {
+			addFavorite:(title)=>{
+				setStore({favorite:[...getStore().favorite, title]})
+			},
+			removeFavorite:(id) =>{
+				setStore({favorite: getStore().favorite.filter((item,i)=>{return i!= id;})})
+			},
 			getPersonajes: async () => {
                 const url = getStore().swUrl + "/people"
 				const options = {
@@ -90,8 +100,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error(url, options)
 				}
 				const data = await response.json()
-				console.log(data.results)
-				setStore({currentPersonaje: data.results})
+				console.log(data.result)
+				setStore({currentPersonaje: data.result})
+			},
+			getDetailSpecies: async (speciesid) => {
+                const url = `${process.env.URISTART}/api/people/${speciesid}`
+				const options = {
+					method: "GET", 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.result)
+				setStore({currentSpecies: data.result})
+			},
+			getDetailVehiculos: async (vehiclesid) => {
+                const url = `${process.env.URISTART}/api/people/${vehiclesid}`
+				const options = {
+					method: "GET", 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.result)
+				setStore({currentVehiculo: data.result})
+			},
+			getDetailPlanets: async (planetsid) => {
+                const url = `${process.env.URISTART}/api/planets/${planetsid}`
+				const options = {
+					method: "GET", 
+				}
+
+				const response = await fetch(url, options)
+				if (!response.ok) {
+					console.error("Hay un error", response.status, response.statusText)
+					console.error(url, options)
+				}
+				const data = await response.json()
+				console.log(data.result)
+				setStore({currentPlanets: data.result})
 			},
 			getContacts: async () => {
                 const url = getStore().contactListUrl + "/" + getStore().slug
