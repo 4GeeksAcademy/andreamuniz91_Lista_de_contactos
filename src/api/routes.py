@@ -50,9 +50,9 @@ def handle_user(user_id):
         response_body["message"] = f'Recibi el PUT request {user_id}'
         return response_body, 200
     if request.method == "DELETE":
-        response_body["message"] = f'Recibi el DELETE request {user_id}'
-        return response_body, 200
-     # Modificar put y delete
+        response_body["message"] = f'borre a {user_id}'
+        return response_body, 201
+
 @api.route("/medias", methods=["GET"])
 def handle_medias():
     response_body = {}
@@ -81,7 +81,23 @@ def handle_comments():
         db.session.commit()
         response_body["message"] = "POST request"
         return response_body, 201
-        # Falta put y delete
+    
+@api.route("/comments/<int:post_id>", methods=["DELETE", "PUT"])
+def handle_comment_id(post_id):
+    response_body = {}
+    list_comment = db.session.execute(db.select(Comments).where(Comments.id == post_id)).scalar()
+    if request.method == "DELETE":
+        db.session.delete(list_comment)
+        db.session.commit()
+        response_body['message'] = f'Comentario borrado'
+        return jsonify(response_body), 200
+    if request.method == "PUT":
+        data = request.json
+        list_comment.comment_text = data["comment_text"]         
+        db.session.commit()
+        response_body["message"] = f'Recibi el PUT request {post_id}'
+        return jsonify(response_body), 200
+
 @api.route("/posts/<int:user_id>", methods=["POST", "DELETE"])
 def handle_post(user_id):
     if request.method == "POST":
