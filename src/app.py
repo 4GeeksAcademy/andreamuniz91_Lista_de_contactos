@@ -10,6 +10,7 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from api.models import db
+from flask_jwt_extended import JWTManager
 
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -26,11 +27,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 # Others configurations
-# add the admin
-setup_admin(app) # Add the admin
-setup_commands(app) # Add the admin
+setup_admin(app)  # Add the admin
+setup_commands(app)  # Add the admin
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = os.getenv("andreamuniz91")
+jwt = JWTManager(app)
 
 
 # Handle/serialize errors like a JSON object
@@ -45,6 +48,7 @@ def sitemap():
     if ENV == "development":
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, 'index.html')
+
 
 # Any other endpoint will try to serve it like a static file
 @app.route('/<path:path>', methods=['GET'])
