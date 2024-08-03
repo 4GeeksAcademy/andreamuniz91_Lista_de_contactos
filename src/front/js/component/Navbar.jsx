@@ -36,6 +36,11 @@ export const Navbar = () => {
 							<a className="nav-link fs-4" aria-current="page">Contact List</a>
 							</Link>
 						</li>
+						<li className="nav-item">
+							<Link to="/login">
+							<a className="nav-link fs-4" aria-current="page">Iniciar sesión</a>
+							</Link>
+						</li>
 					</ul>					
 				</div>
 			</div>
