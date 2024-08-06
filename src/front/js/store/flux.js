@@ -12,6 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			planets: [],
 			species: [],
 			currentPersonaje: {},
+			currentUser: null,
+			isLoged: false
 		},
 		actions: {
 			getPersonajes: async () => {
@@ -206,6 +208,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			setCurrentContact: (contact) => { setStore({ currentContact: contact }) },
+			setAlert: (newAlert) => {setStore({ alert: newAlert})},
+			setCurrentUser: (user) => {setStore({ currentUser: user })},
+			setIsLoged: (isLogin) => {setStore({ isLoged: isLogin })}
 			
 		}
 	};

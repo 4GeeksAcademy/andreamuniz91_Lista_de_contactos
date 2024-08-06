@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Profiler } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import injectContext from "./store/appContext.js";
 // Custom components
@@ -18,6 +18,9 @@ import { Planets } from "./pages/Planets.jsx";
 import { DetailPeople } from "./pages/DetailPeople.jsx";
 import { Species } from "./pages/Species.jsx";
 import { Login } from "./pages/Login.jsx";
+import { Signup } from "./pages/Signup.jsx";
+import { Profile } from "./pages/Profile.jsx";
+import { Logout } from "./component/Logout.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -43,6 +46,9 @@ const Layout = () => {
                         <Route element={<DetailPeople />} path="/detail-people" />
                         <Route element={<Species />} path="/species" />
                         <Route element={<Login />} path="/login" />
+                        <Route element={<Signup />} path="/signup" />
+                        <Route element={<Profile />} path="/profile" />
+                        <Route element={<Logout />} path="/logout" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

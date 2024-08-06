@@ -1,47 +1,65 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Logout } from "./Logout.jsx";
 
 export const Navbar = () => {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
 			<div className="container-fluid">
-				<a className="navbar-brand" href="#">Proyectos Andrea</a>
-				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
-					<span className="navbar-toggler-icon"></span>
-				</button>
 				<div className="collapse navbar-collapse" id="navbarsExample05">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						<li className="nav-item">
-							<Link to="/people">
-							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">Personajes</a>
+						<li>
+							<button type="button" className="btn btn-primary ms-2">
+								<Link to="/signup" className="nav-item nav-link fs-4 d-flex justify-content-end text-dark" aria-current="page">
+									Regístrate
+								</Link>
+							</button>
+						</li>
+						<li>
+							<button type="button" className="btn btn-info ms-2">
+								<Link to="/login" className="nav-item nav-link fs-4 d-flex justify-content-end text-dark" aria-current="page">
+									Iniciar sesión
+								</Link>
+							</button>
+						</li>
+						{/* <li>
+							<button type="button" className="btn btn-danger ms-2">
+							<Link to="/logout" className="nav-item nav-link fs-4 d-flex justify-content-end text-dark" aria-current="page">
+							Cerrar sesión
+							</Link>
+							</button>
+							</li> */}
+						<li>
+							<Link to="/people" className="nav-item nav-link fs-4 d-flex justify-content-end" aria-current="page">
+								Personajes
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link to="/species">
-							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">Especies</a>
+						<li>
+							<Link to="/species" className="nav-item nav-link fs-4 d-flex justify-content-end" aria-current="page">
+								Especies
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link to="/vehiculos" className="nav-link fs-4 d-flex justify-content-end" aria-current="page">
-							 Vehículos
+						<li>
+							<Link to="/vehiculos" className="nav-item nav-link fs-4 d-flex justify-content-end" aria-current="page">
+								Vehículos
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link to="/planets">
-							<a className="nav-link fs-4 d-flex justify-content-end" aria-current="page">Planetas</a>
+						<li>
+							<Link to="/planets" className="nav-item nav-link fs-4 d-flex justify-content-end" aria-current="page">
+								Planetas
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link to="/contact-list">
-							<a className="nav-link fs-4" aria-current="page">Contact List</a>
+						<li>
+							<Link to="/contact-list" className="nav-item nav-link fs-4 d-flex justify-content-end" aria-current="page">
+								Contact List
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link to="/login">
-							<a className="nav-link fs-4" aria-current="page">Iniciar sesión</a>
-							</Link>
-						</li>
-					</ul>					
+							<li>
+									<Link to="/logout">
+									   <Logout />
+									</Link>
+							</li>
+					</ul>
 				</div>
 			</div>
 		</nav>
