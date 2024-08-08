@@ -13,9 +13,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			species: [],
 			currentPersonaje: {},
 			currentUser: null,
-			isLoged: false
+			isLoged: false,
+			favorite: [],
 		},
 		actions: {
+			addFavorite:(title)=>{
+				setStore({favorite:[...getStore().favorite, title]})
+			},
+			removeFavorite:(id) =>{
+				setStore({favorite: getStore().favorite.filter((item,i)=>{return i!= id;})})
+			},
+			
 			getPersonajes: async () => {
                 const url = getStore().swUrl + "/people"
 				const options = {
