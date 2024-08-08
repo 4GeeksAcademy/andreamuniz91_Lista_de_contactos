@@ -21,6 +21,7 @@ import { Login } from "./pages/Login.jsx";
 import { Signup } from "./pages/Signup.jsx";
 import { Profile } from "./pages/Profile.jsx";
 import { Logout } from "./component/Logout.jsx";
+import { Dashboard } from "./pages/Dashboard.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -49,6 +50,7 @@ const Layout = () => {
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<Profile />} path="/profile" />
                         <Route element={<Logout />} path="/logout" />
+                        <Route element={<Dashboard />} path="/dashboard" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

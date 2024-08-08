@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from api.models import db, Users, Favourite
+from api.models import db, Users, Favorite, Planet, People, Species
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
@@ -104,12 +104,13 @@ def signup():
         is_active = True,
         is_admin = False
     )
+    print(new_user)
     db.session.add(new_user)
     db.session.commit()
     user = db.session.execute(db.select(Users).where(Users.email == email)).scalar()
     access_token = create_access_token(identity={'email': user.email, 
-                                                'user_id': user.id, 
-                                                'is_admin': user.is_admin})
+                                                 'user_id': user.id, 
+                                                 'is_admin': user.is_admin})
     response_body['results'] = user.serialize()
     response_body['message'] = 'User registrado y logeado'
     response_body['access_token'] = access_token

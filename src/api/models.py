@@ -10,6 +10,8 @@ class Users(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     is_admin = db.Column(db.Boolean(), unique=False, nullable=False)
+    favorites = db.relationship('Favorite', foreign_keys=[user_id], backref=db.backref('', lazy='select'))
+    
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -21,18 +23,15 @@ class Users(db.Model):
                 "is_active": self.is_active,
                 "is_admin": self.is_admin}
 
-class Favourite(db.Model):
-    __tablename__ = 'favourite'
+class Favorites(db.Model):
+    __tablename__ = 'favorite'
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(120))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_to = db.relationship('Users', foreign_keys=[user_id],
-                                backref=db.backref('user_to', lazy='select'))
-
+    user_to = db.relationship('Users', foreign_keys=[user_id], backref=db.backref('user_to', lazy='select'))
     def __repr__(self):
-        return f'El item favorito de {self.user_id} es {self.item}' 
-
+        return f'The item favorite from {self.user_id} is {self.item}>'
     def serialize(self):
-        return{"id": self.id, 
-                 "item":sefl.item, 
-                 "user_id": self.user_id}
+        return {"id": self.id,
+                "item": self.item,
+                "user_id": self.user_id}

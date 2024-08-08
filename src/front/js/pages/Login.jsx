@@ -14,8 +14,9 @@ export const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const dataToSend = ({"email": email,
-                         "password": password });
+    const dataToSend = {"email": email,
+                        "password": password};
+    console.log(dataToSend)
     // 1. fetch al /api/login enviando en el body el dataToSend
     const uri = process.env.BACKEND_URL + '/api/login'
     const options = {
@@ -47,10 +48,9 @@ export const Login = () => {
     actions.setCurrentUser(data.results);
     actions.setIsLoged(true)
     actions.setAlert({visible: true, back: 'info', text: data.message})
-    navigate('/Dashboar')
+    navigate("/Dashboard")  
   };
-
-
+  
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -70,7 +70,7 @@ export const Login = () => {
                     value={password} onChange={handlePassword} required/>
                 </div>
                 <div className="text-center">
-                  <button type="submit" className="btn btn-primary mt-5">Iniciar sesión</button>
+                  <button type="submit" onChange={handleSubmit} className="btn btn-primary mt-5">Iniciar sesión</button>
                 </div>
               </form>
             </div>

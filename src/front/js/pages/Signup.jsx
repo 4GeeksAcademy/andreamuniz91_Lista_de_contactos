@@ -15,6 +15,7 @@ export const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataToSend = { email, password };
+    console.log(dataToSend)
     const uri = process.env.BACKEND_URL + '/api/signup';
     const options = {
       method: 'POST',
@@ -41,7 +42,6 @@ export const Signup = () => {
     navigate('/login')
   };
 
-
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -61,7 +61,7 @@ export const Signup = () => {
                     value={password} onChange={handlePasswordChange} required/>
                 </div>
                 <div className="text-center">
-                  <button type="submit" className="btn btn-primary mt-5">Registrarse</button>
+                  <button type="submit" onClick={handleSubmit} className="btn btn-primary mt-5">Registrarse</button>
                 </div>
               </form>
             </div>
