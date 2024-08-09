@@ -6,6 +6,10 @@ import { Context } from "../store/appContext.js";
 
 export const Navbar = () => {
 	const { store, actions } = useContext(Context)
+	
+	const handleLogout = () => {
+        actions.logout();
+    };
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
@@ -14,11 +18,15 @@ export const Navbar = () => {
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						{store.isLoged ?
 							<>
-								<li>
+								{/* <li>
 									<Link to="/logout">
 										<Logout />
 									</Link>
-								</li>
+								</li> */}
+							<Link to="/">
+							<button className="btn btn-primary ms-2">Logout</button>
+							<button className="btn btn-primary ms-2" onClick={handleLogout}>Logout</button>
+							</Link>
 							</>
 							:
 						    <>

@@ -17,12 +17,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			favorite: [],
 		},
 		actions: {
-			addFavorite:(title)=>{
+			removeFavorite: (name) => {
+			const store = getStore();
+			const removeFavorites = store.favorites.filter((element) => element !== name);
+			setStore({ favorites: removeFavorites });
+		},
+		
+			/* addFavorite:(title)=>{
 				setStore({favorite:[...getStore().favorite, title]})
 			},
 			removeFavorite:(id) =>{
 				setStore({favorite: getStore().favorite.filter((item,i)=>{return i!= id;})})
-			},
+			}, */
 			
 			getPersonajes: async () => {
                 const url = getStore().swUrl + "/people"
