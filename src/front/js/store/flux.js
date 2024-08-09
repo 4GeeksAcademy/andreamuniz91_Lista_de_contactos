@@ -14,21 +14,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			currentPersonaje: {},
 			currentUser: null,
 			isLoged: false,
-			favorite: [],
+			favorites: [],
 		},
-		actions: {
+		actions: /* {
 			removeFavorite: (name) => {
 			const store = getStore();
 			const removeFavorites = store.favorites.filter((element) => element !== name);
 			setStore({ favorites: removeFavorites });
-		},
-		
-			/* addFavorite:(title)=>{
-				setStore({favorite:[...getStore().favorite, title]})
+		}, */
+		    {
+			addFavorite: (id)=>{
+				setStore({favorites:[...getStore().favorites, id]})
 			},
-			removeFavorite:(id) =>{
-				setStore({favorite: getStore().favorite.filter((item,i)=>{return i!= id;})})
-			}, */
+		   removeFavorite:(item)=>{
+				setStore({favorites: getStore().favorites.filter((favorite)=>{return favorite!== item})})
+			}, 
 			
 			getPersonajes: async () => {
                 const url = getStore().swUrl + "/people"

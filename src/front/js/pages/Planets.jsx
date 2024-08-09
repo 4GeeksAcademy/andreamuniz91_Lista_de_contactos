@@ -7,11 +7,15 @@ const {store, actions} = useContext(Context)
 const fetchData = async () => {
    await actions.getPlanets()
 }
-
+const handleFavorite = (planet) => {
+    actions.addFavorite(planet);
+};
 const handleError = (e) => {
     e.target.src = 'https://starwars-visualguide.com/assets/img/placeholder.jpg';
-  
 }
+useEffect(() => {
+    console.log(store.favorites)
+}, [store.favorites]);
 
 useEffect(() => {
     fetchData()
@@ -29,7 +33,7 @@ useEffect(() => {
                             <img onError={handleError} height="280" src={`https://starwars-visualguide.com/assets/img/planets/${item.uid}.jpg`} className="card-img-top" alt="..." />
                             <div className="card-body d-flex justify-content-between align-items-end">
                             <button className="btn btn-warning">+Info</button>
-                            <button onClick={() => actions.addFavorite(item.name)} type="button" className="btn">
+                            <button onClick={() => handleFavorite(item.name)} type="button" className="btn">
                                 <i className="fa fa-heart"></i>
                             </button>
                             </div>
