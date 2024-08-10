@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from api.models import db, Users, Favorites
+from api.models import db, Users, Favorites, People, Film, Starship, Vehicle, Species, Planet, FilmPeople, FilmStarships, FilmVehicles, FilmSpecies, FilmPlanets, PeopleStarships, PeopleVehicles, PeopleSpecies
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
@@ -27,16 +27,32 @@ def handle_users():
     if request.method == 'GET':
         rows = db.session.execute(db.select(Users)).scalars()
         results = [row.serialize() for row in rows]  # List comprehension
-        # Opción 2
-        # results = []
-        # for row in rows:
-        #    results.append(row.serialize())
         response_body['results'] = results
-        response_body['message'] = "recibí el GET request"
+        response_body['message'] = "GET received"
         return response_body, 200
     if request.method == 'POST':
-        response_body['message'] = "recibí el POST request"
+        data = request.json
+        username = data.get('username', None)
+        email = data.get('email', None)
+        if not username or not email:
+            response_body['message'] = 'Missing data'
+            response_body['results'] = {}
+            return response_body, 400
+        username_exist = db.session.execute(db.select(Users).where(Users.username == username)).scalar()
+        email_exist = db.session.execute(db.select(Users).where(Users.email == email)).scalar()
+        if username_exist or email_exist:
+            response_body['message'] = 'User already exist'
+            response_body['results'] = {}
+            return response_body, 404
+        row = Users(username = data['username'], 
+                    email = data['email'],
+                    firstname = data['firstname'],
+                    lastname = data['lastname'])
+        db.session.add(row)
+        db.session.commit()
+        response_body['message'] = "POST received"
         return response_body, 200
+
 
 
 @api.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -52,27 +68,80 @@ def handle_user(user_id):
         response_body['message'] = f'recibí el GET request {user_id}'
         return response_body, 200
     if request.method == 'PUT':
-        response_body['message'] = f'recibí el PUT request {user_id}'
+        data = request.json
+        username = data.get('username', None)
+        email = data.get('email', None)
+        if not username or not email:
+            response_body['message'] = 'Missing data'
+            response_body['results'] = {}
+            return response_body, 400
+        user = db.session.execute(db.select(Users).where(Users.id == user_id)).scalar()
+        if not user:
+            response_body['message'] = f'User doesnt exist {user_id}'
+            response_body['results'] = {}
+            return response_body, 404
+        username_exist = db.session.execute(db.select(Users).where(Users.username == username, Users.id != user_id)).scalar()
+        email_exist = db.session.execute(db.select(Users).where(Users.email == email, Users.id != user_id)).scalar()
+        if username_exist or email_exist:
+            response_body['message'] = 'User already exist'
+            response_body['results'] = {}
+            return response_body, 409
+        user.username = username
+        user.email = email
+        user.firstname = data.get('firstname', user.firstname)
+        user.lastname = data.get('lastname', user.lastname)
+        db.session.commit()
+        response_body['message'] = "User updated successfully"
+        response_body['results'] = user.serialize()
         return response_body, 200
     if request.method == 'DELETE':
-        response_body['message'] = f'recibí el DELETE request {user_id}'
-        return response_body, 200
-
-@api.route("/favorite/<int:user_id>", methods=["GET", "POST"])
-def favourite():
-    response_body = {}
-    data = request.json
-    item = data.get("item")
-    user_id = data.get("user_id")
-    user = db.session.execute(db.select(Favourite).where(Favourite.user_id == user_id )).scalar()
-    favourite = Favourite(
-        item = data.get("item"),
-        user_id = data.get("user_id")
-    )
-    db.session.add(favourite)
+        user = db.session.execute(db.select(Users).where(Users.id == user_id)).scalar()
+    if not user:
+        response_body['message'] = f'User doesnt exist {user_id}'
+        response_body['results'] = {}
+        return response_body, 404
+    db.session.delete(user)
     db.session.commit()
-    response_body["message"] = "POST request"
-    return response_body, 201
+    response_body['message'] = f'User {user_id} deleted successfully'
+    return response_body, 200
+
+
+@api.route("/favorites", methods=['POST', 'GET'])
+@jwt_required()
+def favorites():
+    response_body = {}
+    current_user = get_jwt_identity()
+    user = db.session.execute(db.select(Users).where(Users.id == current_user['user_id'])).scalar()
+    if not user:
+        response_body['results'] = {}
+        response_body["message"] = "User not found"
+        return jsonify(response_body), 404
+    user_id = user.id
+    if request.method == 'POST': # Falta un dataToSend!!!!
+        data = request.json
+        item = data.get("item")
+        if not item:
+            response_body["message"] = "Missing favorite item"
+            return response_body, 400
+        existing_favourite = db.session.execute(
+            db.select(Favorites).where(Favorites.user_id == user_id, Favorites.item == item)
+        ).scalar()
+        if existing_favourite:
+            response_body["message"] = "The favourite already exists!!!"
+            return jsonify(response_body), 409
+        favourite2 = Favorites(item=item, user_id=user_id)
+        db.session.add(favourite2)
+        db.session.commit()
+        response_body["message"] = "Favourite added"
+        return jsonify(response_body), 201
+
+    if request.method == 'GET':
+        favorites = db.session.execute(db.select(Favorites).where(Favorites.user_id == current_user['user_id'])).scalars()
+        rows = [row.serialize() for row in favorites]
+        response_body['message'] = f'Favorites for user {current_user["email"]} retrieved successfully'
+        response_body['results'] = rows
+        return  jsonify(response_body), 200
+
 
 @api.route("/login", methods=["POST"])
 def login():

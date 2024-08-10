@@ -20,13 +20,13 @@ export const Home = () => {
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="..." class="d-block w-100" alt="..."/>
+      <img src="https://www.xtrafondos.com/wallpapers/star-wars-logo-3654.jpg" class="d-block w-100" alt="..."/>
     </div>
     <div class="carousel-item">
-      <img src="..." class="d-block w-100" alt="..."/>
+      <img src="https://wallpapers-clan.com/wp-content/uploads/2023/10/star-wars-darth-vader-with-lightsaber-dark-desktop-wallpaper-preview.jpg" class="d-block w-100" alt="..."/>
     </div>
     <div class="carousel-item">
-      <img src="..." class="d-block w-100" alt="..."/>
+      <img src="https://wallpapercave.com/wp/wp3614520.jpg" class="d-block w-100" alt="..."/>
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

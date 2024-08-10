@@ -16,20 +16,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			isLoged: false,
 			favorites: [],
 		},
-		actions: /* {
-			removeFavorite: (name) => {
-			const store = getStore();
-			const removeFavorites = store.favorites.filter((element) => element !== name);
-			setStore({ favorites: removeFavorites });
-		}, */
-		    {
+		actions: {
 			addFavorite: (id)=>{
 				setStore({favorites:[...getStore().favorites, id]})
 			},
 		   removeFavorite:(item)=>{
 				setStore({favorites: getStore().favorites.filter((favorite)=>{return favorite!== item})})
 			}, 
-			
+			logout: () => {
+				localStorage.removeItem('token'); 
+				setStore({ 
+					isLoged: false,
+					user: {},
+					favorites: []
+				});
+			},
 			getPersonajes: async () => {
                 const url = getStore().swUrl + "/people"
 				const options = {
