@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Logout } from "./Logout.jsx";
 import { Context } from "../store/appContext.js";
@@ -6,9 +6,42 @@ import { Context } from "../store/appContext.js";
 
 export const Navbar = () => {
 	const { store, actions } = useContext(Context)
+	const [favorites, setFavorites] = useState([]);
 	const handleLogout = () => {
 		actions.logout();
 	};
+	const handleFavourites = async(favourite) =>{
+        const token = localStorage.getItem('token');
+        // Imprimir el token en la consola
+        console.log(token);
+        const dataToSend = {
+            "item": favourite,
+        };
+        // 1. fetch al /api/login enviando en el body el dataToSend
+        const uri = process.env.BACKEND_URL + '/api/favorites'
+        const options = {
+            method: 'GET',
+            body: JSON.stringify(dataToSend),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        console.log(dataToSend, localStorage.getItem('access_token'));
+        const response = await fetch(uri, options)
+        if (!response.ok) {
+            // Tratamos el error
+            console.log('Error: ', response.status, response.statusText);
+            if (response.status == 401) {
+                const data = await response.json()
+                console.log("Error: " + response.status + response.statusText)
+            }
+            else if(response.status == 409){
+                console.log("El favorito ya existe");
+            }
+            return
+        }
+    }
 	useEffect(() => {
 		console.log(store.favorites)
 	}, [store.favorites]);
@@ -71,6 +104,7 @@ export const Navbar = () => {
 									role="button"
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
+									onClick={handleFavourites}
 								>
 									Favoritos
 								</a>
@@ -78,11 +112,17 @@ export const Navbar = () => {
 									{store.favorites.length === 0 ? (
 										<li className="dropdown-item">No hay favoritos</li>
 									) : (
-										store.favorites.map(item => (
-											<li className="dropdown-item d-flex justify-content-between align-items-center">
+										store.favorites.map((item, index) => (
+											<li
+												key={index}
+												className="dropdown-item d-flex justify-content-between align-items-center"
+											>
 												{item}
-												<i className="fas fa-trash-alt"
-													onClick={() => actions.removeFavorite(item)}></i>
+												<i
+													className="fas fa-trash-alt"
+													onClick={() => removeFavorite(item)}
+													style={{ cursor: 'pointer' }}
+												></i>
 											</li>
 										))
 									)}
