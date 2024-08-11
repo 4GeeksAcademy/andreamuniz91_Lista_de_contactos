@@ -106,7 +106,7 @@ def handle_user(user_id):
     return response_body, 200
 
 
-@api.route("/favorites", methods=['POST', 'GET'])
+@api.route("/favorites", methods=['POST', 'GET', 'DELETE'])
 @jwt_required()
 def favorites():
     response_body = {}
@@ -117,7 +117,7 @@ def favorites():
         response_body["message"] = "User not found"
         return jsonify(response_body), 404
     user_id = user.id
-    if request.method == 'POST': # Falta un dataToSend!!!!
+    if request.method == 'POST':
         data = request.json
         item = data.get("item")
         if not item:
@@ -141,6 +141,19 @@ def favorites():
         response_body['message'] = f'Favorites for user {current_user["email"]} retrieved successfully'
         response_body['results'] = rows
         return  jsonify(response_body), 200
+
+    if request.method == "DELETE":
+        data = request.json
+        itemUser = data.get("item")
+        favourite_to_delete = db.session.execute(db.select(Favorites).where(Favorites.user_id == user_id, Favorites.item == itemUser)).scalar()
+        if not favourite_to_delete:
+            response_body["message"] = f"Favourite item '{itemUser}' not found"
+            return jsonify(response_body), 404
+        db.session.delete(favourite_to_delete)
+        db.session.commit()
+        response_body["message"] = f"Favourite item '{itemUser}' deleted"
+        return jsonify(response_body), 201
+
 
 
 @api.route("/login", methods=["POST"])

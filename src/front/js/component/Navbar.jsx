@@ -7,44 +7,55 @@ import { Context } from "../store/appContext.js";
 export const Navbar = () => {
 	const { store, actions } = useContext(Context)
 	const [favorites, setFavorites] = useState([]);
+	const userLogin = store.isLoged
+	const token = localStorage.getItem('token');
 	const handleLogout = () => {
 		actions.logout();
 	};
-	const handleFavourites = async(favourite) =>{
-        const token = localStorage.getItem('token');
-        // Imprimir el token en la consola
-        console.log(token);
-        const dataToSend = {
-            "item": favourite,
-        };
-        // 1. fetch al /api/login enviando en el body el dataToSend
-        const uri = process.env.BACKEND_URL + '/api/favorites'
-        const options = {
-            method: 'GET',
-            body: JSON.stringify(dataToSend),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        console.log(dataToSend, localStorage.getItem('access_token'));
-        const response = await fetch(uri, options)
-        if (!response.ok) {
-            // Tratamos el error
-            console.log('Error: ', response.status, response.statusText);
-            if (response.status == 401) {
-                const data = await response.json()
-                console.log("Error: " + response.status + response.statusText)
-            }
-            else if(response.status == 409){
-                console.log("El favorito ya existe");
-            }
-            return
-        }
-    }
-	useEffect(() => {
-		console.log(store.favorites)
-	}, [store.favorites]);
+	const removeFavourites = async (item) => {
+		const uri = process.env.BACKEND_URL + '/api/favorites';
+		const options = {
+			method: 'DELETE',
+			body: JSON.stringify({"item": item}),
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		};
+		const response = await fetch(uri, options);
+		if(!response.ok){
+			console.log('Error', response.status, response.statusText);
+		}
+		if(response == 201){
+			console.log("Correcto");
+			
+		}
+		console.log('Favorito eliminado correctamente');
+		favourite();
+	}
+	const favourite = async () => {
+		const uri = process.env.BACKEND_URL + '/api/favorites';
+		const options = {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		};
+			try {
+				const response = await fetch(uri, options);
+				if (!response.ok) {
+					console.log("Error: ", response.status, response.statusText);
+					return;
+				}
+				const data = await response.json();
+				console.log(data)
+				setFavorites(data.results);
+			} catch (error) {
+				console.log('Eroor fecth', error);
+				return;
+			}
+	}
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
@@ -96,31 +107,25 @@ export const Navbar = () => {
 								Contact List
 							</Link>
 						</li>
-						<ul className="navbar-nav mb-2 mb-lg-0">
+						<ul className="navbar-nav mb-2 mb-lg-0" onClick={() => favourite()}>
 							<li className="nav-item dropdown">
-								<a
-									className="nav-link dropdown-toggle"
-									href="#"
-									role="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-									onClick={handleFavourites}
-								>
+								<a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+									aria-expanded="false">
 									Favoritos
 								</a>
 								<ul className="dropdown-menu dropdown-menu-end bg-warning">
-									{store.favorites.length === 0 ? (
+									{ !favorites ? (
 										<li className="dropdown-item">No hay favoritos</li>
 									) : (
-										store.favorites.map((item, index) => (
+										favorites.map((item, index) => (
 											<li
 												key={index}
 												className="dropdown-item d-flex justify-content-between align-items-center"
 											>
-												{item}
+												{item.item}
 												<i
 													className="fas fa-trash-alt"
-													onClick={() => removeFavorite(item)}
+													onClick={() => removeFavourites(item.item)}
 													style={{ cursor: 'pointer' }}
 												></i>
 											</li>

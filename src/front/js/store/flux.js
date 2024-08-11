@@ -15,6 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			currentUser: null,
 			isLoged: false,
 			favorites: [],
+			favourites: [],
 			
 		},
 		actions: {
@@ -226,8 +227,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			setCurrentContact: (contact) => { setStore({ currentContact: contact }) },
 			setAlert: (newAlert) => {setStore({ alert: newAlert})},
 			setCurrentUser: (user) => {setStore({ currentUser: user })},
-			setIsLoged: (isLogin) => {setStore({ isLoged: isLogin })}
-
+			setIsLoged: (isLogin) => {setStore({ isLoged: isLogin })},
+			setFavourites: (favourites) => {setStore({ favourites: favourites })}
 			
 		}
 	};
