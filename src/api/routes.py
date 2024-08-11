@@ -26,7 +26,7 @@ def handle_users():
     response_body = {}
     if request.method == 'GET':
         rows = db.session.execute(db.select(Users)).scalars()
-        results = [row.serialize() for row in rows]  # List comprehension
+        results = [row.serialize() for row in rows]
         response_body['results'] = results
         response_body['message'] = "GET received"
         return response_body, 200
@@ -52,7 +52,6 @@ def handle_users():
         db.session.commit()
         response_body['message'] = "POST received"
         return response_body, 200
-
 
 
 @api.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -134,14 +133,12 @@ def favorites():
         db.session.commit()
         response_body["message"] = "Favourite added"
         return jsonify(response_body), 201
-
     if request.method == 'GET':
         favorites = db.session.execute(db.select(Favorites).where(Favorites.user_id == current_user['user_id'])).scalars()
         rows = [row.serialize() for row in favorites]
         response_body['message'] = f'Favorites for user {current_user["email"]} retrieved successfully'
         response_body['results'] = rows
         return  jsonify(response_body), 200
-
     if request.method == "DELETE":
         data = request.json
         itemUser = data.get("item")
@@ -153,7 +150,6 @@ def favorites():
         db.session.commit()
         response_body["message"] = f"Favourite item '{itemUser}' deleted"
         return jsonify(response_body), 201
-
 
 
 @api.route("/login", methods=["POST"])
@@ -174,6 +170,7 @@ def login():
     response_body['message'] = 'User logged'
     response_body['access_token'] = access_token
     return response_body, 201
+
 
 @api.route('/signup', methods=['POST'])
 def signup():

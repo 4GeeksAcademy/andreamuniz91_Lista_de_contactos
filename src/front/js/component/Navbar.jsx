@@ -9,6 +9,7 @@ export const Navbar = () => {
 	const [favorites, setFavorites] = useState([]);
 	const userLogin = store.isLoged
 	const token = localStorage.getItem('token');
+	
 	const handleLogout = () => {
 		actions.logout();
 	};

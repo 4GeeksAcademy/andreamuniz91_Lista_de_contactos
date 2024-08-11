@@ -16,7 +16,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			isLoged: false,
 			favorites: [],
 			favourites: [],
-			
 		},
 		actions: {
 			addFavorite: (id)=>{
@@ -188,10 +187,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return
 				}				
 			},
-			
-			
-			
-			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
